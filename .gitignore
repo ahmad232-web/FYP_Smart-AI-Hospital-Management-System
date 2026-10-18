@@ -3,6 +3,10 @@
 .env.*
 !.env.example
 !**/.env.example
+github_pat_*
+*.pub
+*.pem
+*.key
 
 # JavaScript / TypeScript dependencies and generated output
 node_modules/
