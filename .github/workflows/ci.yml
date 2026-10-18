@@ -105,3 +105,61 @@ jobs:
 
       - name: Run Laravel Test Suite
         run: php artisan test
+
+  # ------------------------------------------------------------
+  # Job 4: Build & Push Docker Images to Docker Hub
+  # ------------------------------------------------------------
+  docker-hub-push:
+    name: Build & Push to Docker Hub
+    needs: [client-ci, express-ci, laravel-ci]
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 1. Build and Push Angular Client Image
+      - name: Build & Push Angular Client Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Patient-Management-System-main/client
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-client:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-client:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # 2. Build and Push Express API Image
+      - name: Build & Push Express API Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Patient-Management-System-main/express-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-express:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-express:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # 3. Build and Push Laravel API Image
+      - name: Build & Push Laravel API Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Patient-Management-System-main/laravel-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-laravel:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/smart-hms-laravel:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
