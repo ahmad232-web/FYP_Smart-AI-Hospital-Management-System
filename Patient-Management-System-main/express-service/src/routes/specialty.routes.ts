@@ -1,6 +1,6 @@
 import { Router } from "express";
-// import { checkAccessToken } from "../Middlewares/auth.middleware";
-import { SpecialtyController } from "../Controllers/specialty.controller";
+// import { checkAccessToken } from "../middlewares/auth.middleware";
+import { SpecialtyController } from "../controllers/specialty.controller";
 import { checkRoleMiddleware } from "../middlewares/checkRole.middleware";
 import { Role } from "../enums";
 
