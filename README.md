@@ -1,6 +1,6 @@
-# Smart HMS
+# Smart AI Cloud-Based Management System
 
-Smart HMS is a patient-management system composed of an Angular web client, an Express API, and a Laravel API. The services share a MySQL database; Laravel owns database migrations while Express connects through Sequelize.
+Smart-AI HMS is a patient-management system composed of an Angular web client, an Express API, and a Laravel API. The services share a MySQL database; Laravel owns database migrations while Express connects through Sequelize.
 
 ## Project structure
 
